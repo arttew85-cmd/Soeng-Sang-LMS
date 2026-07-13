@@ -1,0 +1,133 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Represents a student or teacher profile",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "description": "User email address" },
+        "name": { "type": "string", "description": "Full name of the user" },
+        "role": { "type": "string", "enum": ["student", "teacher", "admin"] },
+        "studentId": { "type": "string", "description": "Student identification number" },
+        "classroom": { "type": "string", "description": "Classroom code like M.1/1" },
+        "attendanceNo": { "type": "number", "description": "Student attendance sequence number" },
+        "profilePicUrl": { "type": "string", "description": "URL of user profile picture" },
+        "assg1": { "type": "number", "description": "Score of assignment 1" },
+        "assg2": { "type": "number", "description": "Score of assignment 2" },
+        "midterm": { "type": "number", "description": "Score of midterm exam" },
+        "status": { "type": "string", "enum": ["Passed", "Incomplete", "Average"] }
+      },
+      "required": ["email", "name", "role"]
+    },
+    "Classroom": {
+      "title": "Classroom",
+      "description": "Represents a dynamic classroom configured by admins",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Classroom name, e.g. ม.4/1" }
+      },
+      "required": ["name"]
+    },
+    "Lesson": {
+      "title": "Lesson",
+      "description": "Educational lesson details assigned to classes",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique lesson ID" },
+        "title": { "type": "string", "description": "Lesson title text" },
+        "type": { "type": "string", "enum": ["Video", "Reading", "Assignment"] },
+        "duration": { "type": "string", "description": "Duration/Read-time, e.g., 10 mins" },
+        "status": { "type": "string", "enum": ["completed", "active", "locked"] },
+        "targetClassrooms": { "type": "array", "description": "List of classrooms targeted" }
+      },
+      "required": ["id", "title", "type", "duration", "status"]
+    },
+    "ExamQuestion": {
+      "title": "ExamQuestion",
+      "description": "Single exam question details",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number", "description": "Sequential question ID" },
+        "text": { "type": "string", "description": "Question statement" },
+        "options": { "type": "array", "description": "Array of selection options" },
+        "correctAnswer": { "type": "string", "description": "Correct key, A-D or ก-ง" },
+        "category": { "type": "string" },
+        "difficulty": { "type": "string" },
+        "number": { "type": "number" }
+      },
+      "required": ["id", "text", "options", "correctAnswer"]
+    },
+    "ExamSettings": {
+      "title": "ExamSettings",
+      "description": "Configurations for the master exam",
+      "type": "object",
+      "properties": {
+        "timeLimit": { "type": "number", "description": "Time limit in minutes" },
+        "scoreVisibility": { "type": "boolean", "description": "Whether students see score after submit" },
+        "answerKeyVisibility": { "type": "boolean", "description": "Whether students see answer key" },
+        "isOpen": { "type": "boolean", "description": "Whether exam is open for submissions" },
+        "targetClassrooms": { "type": "array", "description": "Classrooms allowed to take the exam" }
+      },
+      "required": ["timeLimit", "scoreVisibility", "answerKeyVisibility", "isOpen", "targetClassrooms"]
+    },
+    "AssignmentSubmission": {
+      "title": "AssignmentSubmission",
+      "description": "Student homework uploads and comments",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "studentName": { "type": "string" },
+        "classroom": { "type": "string" },
+        "attendanceNo": { "type": "number" },
+        "fileName": { "type": "string" },
+        "fileSize": { "type": "string" },
+        "comment": { "type": "string" },
+        "status": { "type": "string", "enum": ["Pending", "Draft", "Not Submitted"] },
+        "submittedAt": { "type": "string" },
+        "gradedScore": { "type": "number" }
+      },
+      "required": ["studentId", "studentName", "classroom", "attendanceNo", "fileName", "status"]
+    },
+    "SiteSettings": {
+      "title": "SiteSettings",
+      "description": "Global website settings and general config",
+      "type": "object",
+      "properties": {
+        "siteTitle": { "type": "string" },
+        "announcement": { "type": "string" },
+        "schoolLogo": { "type": "string" }
+      },
+      "required": ["siteTitle", "announcement", "schoolLogo"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Directory of registered student and teacher profiles"
+    },
+    "/classrooms/{classroomId}": {
+      "schema": "Classroom",
+      "description": "Dynamic classrooms list"
+    },
+    "/lessons/{lessonId}": {
+      "schema": "Lesson",
+      "description": "Curriculum list of video/reading lessons"
+    },
+    "/examQuestions/{questionId}": {
+      "schema": "ExamQuestion",
+      "description": "Database of online exam questions"
+    },
+    "/settings/global": {
+      "schema": "SiteSettings",
+      "description": "Global settings for school branding and title announcements"
+    },
+    "/settings/exam": {
+      "schema": "ExamSettings",
+      "description": "Configurations for the master online exam"
+    },
+    "/submissions/{submissionId}": {
+      "schema": "AssignmentSubmission",
+      "description": "Assignment and worksheet submissions uploaded by students"
+    }
+  }
+}

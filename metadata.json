@@ -1,0 +1,6 @@
+{
+  "name": "Soeng Sang LMS",
+  "description": "Learning Management System for Soeng Sang School Computer Science course",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
